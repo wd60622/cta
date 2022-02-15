@@ -11,6 +11,9 @@ The `CTAClient` has methods for each endpoints. Namely,
 More endpoint specific documentation found [here](
 https://www.transitchicago.com/developers/ttdocs/)
 
+This API requires a key which can be easily received [here](https://www.transitchicago.com/developers/traintrackerapply/).
+Follow the `.env.example` file for setting.
+
 ## Getting Started
 
 ```python
