@@ -47,6 +47,8 @@ class Response(ABC):
 
 
 class ETAResponse(Response):
+    """Common functionality between endpoint data."""
+
     def to_frame(self) -> pd.DataFrame:
         payload = self.data["ctatt"]
         if "eta" not in payload:
@@ -56,14 +58,16 @@ class ETAResponse(Response):
 
 
 class ArrivalResponse(ETAResponse):
-    pass
+    """Response from arrivals endpoint."""
 
 
 class FollowResponse(ETAResponse):
-    pass
+    """Response from follow endpoint."""
 
 
 class LocationResponse(Response):
+    """Response from location endpoint."""
+
     def to_frame(self) -> pd.DataFrame:
         dfs = [
             Trains(data=route["train"]).to_frame().assign(train=route["@name"])

@@ -2,7 +2,11 @@ from enum import Enum
 
 
 class Route(Enum):
-    """Enum of the different train lines."""
+    """Enum of the different train lines.
+
+    Codes found in the API documentation.
+
+    """
 
     RED = "red"
     BLUE = "blue"

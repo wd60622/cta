@@ -12,7 +12,11 @@ class WrongFileTypeError(Exception):
 
 
 class Stations:
-    """Station information for the CTA stations and stops."""
+    """Station information for the CTA stations and stops.
+
+    Data source found in the API documentation.
+
+    """
 
     url: str = "https://data.cityofchicago.org/resource/8pix-ypme.json"
 
@@ -63,11 +67,3 @@ class Stations:
         idx = idx & self.data[route.value]
 
         return self.data.loc[idx, self.columns].reset_index(drop=True)
-
-
-if __name__ == "__main__":
-    stations = Stations()
-
-    response = stations.lookup("Logan", route=Route.BLUE)
-
-    stations.save()

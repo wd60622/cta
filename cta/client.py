@@ -15,7 +15,11 @@ class TooManyArgsError(Exception):
 
 
 class ParamBuilder:
-    """Helper class for building the parameters for the endpoints."""
+    """Helper class for building the parameters for the endpoints.
+
+    Not to be used by itself.
+
+    """
 
     def __init__(self, key):
         self.key = key
@@ -47,6 +51,10 @@ class NoCredentialsError(KeyError):
     """No credentials provided."""
 
 
+class RequiredArgMissingError(ValueError):
+    """An argument is missing."""
+
+
 class CTAClient:
     """Class to work with the different CTA endpoints.
 
@@ -58,7 +66,7 @@ class CTAClient:
     Example:
         Initialize the client.
 
-        cta = CTAClient()
+        >>> cta = CTAClient()
 
     """
 
@@ -89,18 +97,25 @@ class CTAClient:
         """Get the arrivals for station(s), stop(s), and route(s).
 
         Args:
-            mapid:
-            stpid:
-            max:
-            route:
+            mapid: One or more station ids.
+            stpid: One or more stop ids.
+            max: total number of responses. Default is all.
+            route: Train line for the response.
 
         Returns:
+            ArrivalResponse
 
+        Example:
+            Get all damen blue line arrivals.
+
+            >>> # Lookup with cta.stations.Stations class
+            >>> damen_blue_line_mapid = 40590
+            >>> arrival_response = cta.arrivals(mapid=damen_blue_line_mapid)
 
         """
         if mapid is None and stpid is None:
             msg = "Both 'mapid' and 'stpid' cannot be null. Please provide one."
-            raise Exception(msg)
+            raise RequiredArgMissingError(msg)
 
         if mapid is not None and stpid is not None:
             warnings.warn(
@@ -114,7 +129,16 @@ class CTAClient:
         return ArrivalResponse(data=self._send_request(url, params))
 
     def locations(self, route: Union[Route, list[Route]]) -> LocationResponse:
-        """Get the location of"""
+        """Get the location of trains for route(s).
+
+        Args:
+            route: Single or multiple cta.route.Route instances. A max of four
+                routes is allowed from CTA API
+
+        Returns:
+            LocationResponse
+
+        """
         url = f"{self.base_url}/ttpositions.aspx"
 
         params = self.builder.build(rt=route)
@@ -122,6 +146,15 @@ class CTAClient:
         return LocationResponse(data=self._send_request(url, params))
 
     def follow(self, runnumber: str) -> FollowResponse:
+        """Follow a given train by its runnumber.
+
+        Args:
+            runnumber: single runnumber. Only one runnumber is allowed.
+
+        Returns:
+            FollowResponse
+
+        """
         url = f"{self.base_url}/ttfollow.aspx"
 
         if not isinstance(runnumber, (str, int)):
@@ -140,22 +173,3 @@ class CTAClient:
             raise Exception(msg)
 
         return response.json()
-
-
-if __name__ == "__main__":
-    cta = CTAClient()
-
-    damen_mapid = 40590
-    logan_mapid = 41020
-    mapids = [40540, 40900, 40080, 40380]
-    # mapids = [40830, 41270]
-    stpids = [30162, 30161, 30022, 30023]
-
-    # response = cta.arrivals(mapid=mapids, stpid=stpids, route=Route.BLUE)
-    response = cta.locations(route=Route.BLUE)
-
-    # response = cta.follow(runnumber=426)
-
-    from rich import print_json
-
-    # response = cta.locations(Route.BLUE, Route.RED)
