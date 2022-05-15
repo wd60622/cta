@@ -9,6 +9,7 @@ from cta.client import (
     TooManyArgsError,
 )
 from cta import Route
+from cta.responses import FollowResponse, ArrivalResponse, LocationResponse
 
 from pathlib import Path
 import json
@@ -109,6 +110,7 @@ def test_arrivals_throws_error(cta_client, kwargs, error_type):
 def test_arrivals(cta_client):
     arrivals_response = cta_client.arrivals(mapid=1)
 
+    assert isinstance(arrivals_response, ArrivalResponse)
     df_arrivals = arrivals_response.to_frame()
     assert isinstance(df_arrivals, pd.DataFrame)
     assert len(df_arrivals) == 4
@@ -139,6 +141,7 @@ def test_arrivals(cta_client):
 def test_locations(cta_client):
     locations_response = cta_client.locations(route=Route.BLUE)
 
+    assert isinstance(locations_response, LocationResponse)
     df_locations = locations_response.to_frame()
     assert isinstance(df_locations, pd.DataFrame)
     assert len(df_locations) == 10
@@ -167,6 +170,7 @@ def test_locations(cta_client):
 def test_follow(cta_client):
     follow_response = cta_client.follow(runnumber=106)
 
+    assert isinstance(follow_response, FollowResponse)
     df_follow = follow_response.to_frame()
     assert isinstance(df_follow, pd.DataFrame)
     assert len(df_follow) == 6

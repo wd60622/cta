@@ -5,6 +5,10 @@ from typing import Union
 from abc import ABC, abstractmethod
 
 
+class NoTrainsError(Exception):
+    """Exception if no values are returned"""
+
+
 class Trains:
     """Class to process train level data."""
 
@@ -57,7 +61,7 @@ class ETAResponse(Response):
     def to_frame(self) -> pd.DataFrame:
         payload = self.data["ctatt"]
         if "eta" not in payload:
-            return pd.DataFrame()
+            raise NoTrainsError("No trains were found in the response payload.")
 
         return Trains(payload["eta"]).to_frame()
 
@@ -81,6 +85,8 @@ class LocationResponse(Response):
             for route in self.data["ctatt"]["route"]
             if "train" in route
         ]
+        if not dfs:
+            raise NoTrainsError("No trains were found in the response payload.")
 
         return pd.concat(dfs, ignore_index=True)
 
