@@ -33,7 +33,7 @@ class ParamBuilder:
 
                 params[key] = values
             elif value is not None:
-                params[key] = self._resolve_type(value)
+                params[key] = [self._resolve_type(value)]
 
         return params
 
@@ -153,6 +153,11 @@ class CTAClient:
 
         """
         url = f"{self.base_url}/ttpositions.aspx"
+
+        if not isinstance(route, Route) and not isinstance(route, list):
+            raise ValueError(
+                f"'route' must be either Route or list of Route not {type(route)}"
+            )
 
         params = self.builder.build(rt=route)
 
