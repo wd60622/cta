@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from cta import __version__
-
 from setuptools import setup
 
 from pathlib import Path
@@ -11,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="python-cta",
-    version=__version__,
+    version="0.0.2",
     author="William Dean",
     author_email="wd60622@gmail.com",
     url="https://github.com/wd60622/cta",

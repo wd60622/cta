@@ -70,3 +70,7 @@ print(df_damen)
 ```
 
 Try this example for yourself in `scripts/readme_example.py`
+
+## Notes
+
+This currently doesn't support the [CTA bus API endpoints](https://www.transitchicago.com/developers/bustracker/). However, it might in the future.
