@@ -1,0 +1,83 @@
+[
+  {
+    "stop_id": "30162",
+    "direction_id": "W",
+    "stop_name": "18th (54th/Cermak-bound)",
+    "station_name": "18th",
+    "station_descriptive_name": "18th (Pink Line)",
+    "map_id": "40830",
+    "ada": true,
+    "red": false,
+    "blue": false,
+    "g": false,
+    "brn": false,
+    "p": false,
+    "pexp": false,
+    "y": false,
+    "pnk": true,
+    "o": false,
+    "location": {
+      "latitude": "41.857908",
+      "longitude": "-87.669147"
+    },
+    ":@computed_region_awaf_s7ux": "8",
+    ":@computed_region_6mkv_f3dw": "14920",
+    ":@computed_region_vrxf_vc4k": "33",
+    ":@computed_region_bdys_3d7i": "343",
+    ":@computed_region_43wa_7qmu": "26"
+  },
+  {
+    "stop_id": "30161",
+    "direction_id": "E",
+    "stop_name": "18th (Loop-bound)",
+    "station_name": "18th",
+    "station_descriptive_name": "18th (Pink Line)",
+    "map_id": "40830",
+    "ada": true,
+    "red": false,
+    "blue": false,
+    "g": false,
+    "brn": false,
+    "p": false,
+    "pexp": false,
+    "y": false,
+    "pnk": true,
+    "o": false,
+    "location": {
+      "latitude": "41.857908",
+      "longitude": "-87.669147"
+    },
+    ":@computed_region_awaf_s7ux": "8",
+    ":@computed_region_6mkv_f3dw": "14920",
+    ":@computed_region_vrxf_vc4k": "33",
+    ":@computed_region_bdys_3d7i": "343",
+    ":@computed_region_43wa_7qmu": "26"
+  },
+  {
+    "stop_id": "30022",
+    "direction_id": "N",
+    "stop_name": "35th/Archer (Loop-bound)",
+    "station_name": "35th/Archer",
+    "station_descriptive_name": "35th/Archer (Orange Line)",
+    "map_id": "40120",
+    "ada": true,
+    "red": false,
+    "blue": false,
+    "g": false,
+    "brn": false,
+    "p": false,
+    "pexp": false,
+    "y": false,
+    "pnk": false,
+    "o": true,
+    "location": {
+      "latitude": "41.829353",
+      "longitude": "-87.680622"
+    },
+    ":@computed_region_awaf_s7ux": "26",
+    ":@computed_region_6mkv_f3dw": "14924",
+    ":@computed_region_vrxf_vc4k": "56",
+    ":@computed_region_bdys_3d7i": "719",
+    ":@computed_region_43wa_7qmu": "1"
+  }
+]

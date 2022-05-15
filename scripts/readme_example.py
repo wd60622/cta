@@ -9,8 +9,15 @@ def train_endpoints_example(cta_client: CTAClient) -> None:
     print(f"Arrival information for Damen Blue Line:")
     print(df_arrivals)
 
-    runnumber = df_arrivals["rn"].tolist()[0]
-    follow_response = cta_client.follow(runnumber=runnumber)
+    for runnumber in df_arrivals["rn"].tolist():
+        # Not always reliable. Try until one is successful
+        try:
+            follow_response = cta_client.follow(runnumber=runnumber)
+        except ValueError as e:
+            print(e)
+            print(df_arrivals.loc[df_arrivals["rn"] == runnumber].T)
+        else:
+            break
     df_follow = follow_response.to_frame()
     print(
         f"Follow next few stops for Train ({runnumber = }) currently coming into Damen station:"
