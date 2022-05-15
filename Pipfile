@@ -13,6 +13,7 @@ pytest = "*"
 black = "*"
 ipython = "*"
 pytest-mock = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"

@@ -35,23 +35,6 @@ class Stations:
             "map_id",
         ]
 
-    def save(self, file: Optional[Path] = None) -> None:
-        """Helper function to save the stations locally.
-
-        Args:
-            file: optional destination location.
-
-        """
-        if not file:
-            file = Path.cwd() / "stations.csv"
-
-        if file.suffix != ".csv":
-            msg = "The file must be a csv."
-            raise WrongFileTypeError(msg)
-
-        print(f"Saving station info to {file}.")
-        self.data[self.columns].to_csv(file, index=False)
-
     def lookup(self, name: str, route: Optional[Route] = None) -> pd.DataFrame:
         """Helper function to search for stations ids.
 
