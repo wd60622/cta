@@ -14,6 +14,14 @@ https://www.transitchicago.com/developers/ttdocs/)
 This API requires a key which can be easily received [here](https://www.transitchicago.com/developers/traintrackerapply/).
 Follow the `.env.example` file for setting.
 
+## Installation
+
+This package is available on `pip`. Install with:
+
+```bash
+$ pip install python-cta
+```
+
 ## Getting Started
 
 ```python

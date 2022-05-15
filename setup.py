@@ -10,7 +10,7 @@ HERE = Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(
-    name="cta",
+    name="python-cta",
     version=__version__,
     author="William Dean",
     author_email="wd60622@gmail.com",
