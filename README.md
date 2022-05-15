@@ -1,4 +1,4 @@
-# Chicago Train API
+# Chicago Transit Authority API
 
 The CTA has three public endpoints for tracking CTA trains. This client supports
 those endpoints.
@@ -21,14 +21,14 @@ from cta import CTAClient
 damen_blue_line_mapid = 40590
 
 # Get arrival information for damen blue line station.
-cta = CTAClient()
-arrival_response = cta.arrivals(mapid=damen_blue_line_mapid)
+cta_client = CTAClient()
+arrival_response = cta_client.arrivals(mapid=damen_blue_line_mapid)
 df_arrivals = arrival_response.to_frame()
 print(df_arrivals)
 
 # Follow specific train
 runnumber = df_arrivals["rn"].tolist()[0]
-follow_response = cta.follow(runnumber=runnumber)
+follow_response = cta_client.follow(runnumber=runnumber)
 df_follow = follow_response.to_frame()
 print(df_follow)
 ```
@@ -37,7 +37,12 @@ print(df_follow)
 from cta import Route
 
 # Get the location of all Blue Line trains.
-location_response = cta.locations(Route.BLUE)
+location_response = cta_client.locations(Route.BLUE)
+df_locations = location_response.to_frame()
+print(df_locations)
+
+# Or all trains on the track
+location_response = cta_client.locations(route=[route for route in Route])
 df_locations = location_response.to_frame()
 print(df_locations)
 ```
@@ -52,6 +57,8 @@ stations = Stations()
 df_stations = stations.data
 print(df_stations)
 
-df_damen = stations.lookup("Damen")
+df_damen = stations.lookup("Damen", route=Route.BLUE)
 print(df_damen)
 ```
+
+Try this example for yourself in `scripts/readme_example.py`

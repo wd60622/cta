@@ -15,4 +15,4 @@ class Route(Enum):
     ORANGE = "org"
     PURPLE = "p"
     PINK = "pink"
-    YELLOW = "yellow"
+    YELLOW = "y"

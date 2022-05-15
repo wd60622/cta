@@ -9,6 +9,10 @@ pandas = "*"
 
 [dev-packages]
 rich = "*"
+pytest = "*"
+black = "*"
+ipython = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.9"

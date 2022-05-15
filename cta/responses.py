@@ -1,5 +1,7 @@
 import pandas as pd
 
+from typing import Union
+
 from abc import ABC, abstractmethod
 
 
@@ -15,12 +17,15 @@ class Trains:
         for col in ["prdt", "arrT"]:
             df_trains[col] = pd.to_datetime(df_trains[col])
 
+        return self._create_convenient_columns(df_trains)
+
+    def _create_convenient_columns(self, df_trains: pd.DataFrame) -> pd.DataFrame:
         now = pd.Timestamp("now")
-        df_trains["time_til_arrival"] = (
+        df_trains["mins_til_arrival"] = (
             df_trains["arrT"] - now
         ).dt.total_seconds() / 60
 
-        df_trains["time_since_prediction"] = (
+        df_trains["mins_since_prediction"] = (
             now - df_trains["prdt"]
         ).dt.total_seconds() / 60
 
@@ -70,8 +75,18 @@ class LocationResponse(Response):
 
     def to_frame(self) -> pd.DataFrame:
         dfs = [
-            Trains(data=route["train"]).to_frame().assign(train=route["@name"])
+            Trains(data=self._ensure_list(route["train"]))
+            .to_frame()
+            .assign(train=route["@name"])
             for route in self.data["ctatt"]["route"]
+            if "train" in route
         ]
 
         return pd.concat(dfs, ignore_index=True)
+
+    def _ensure_list(self, value: Union[dict, list]) -> list:
+        """Case that there is only one train currently"""
+        if isinstance(value, dict):
+            return [value]
+
+        return value

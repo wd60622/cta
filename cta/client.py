@@ -4,7 +4,7 @@ import os
 
 import warnings
 
-from typing import Optional, Union
+from typing import Optional, Union, Any
 
 from cta.route import Route
 from cta.responses import ArrivalResponse, LocationResponse, FollowResponse
@@ -21,18 +21,15 @@ class ParamBuilder:
 
     """
 
-    def __init__(self, key):
+    def __init__(self, key: str):
         self.key = key
 
-    def build(self, **kwargs):
+    def build(self, **kwargs) -> dict[str, Union[int, Route]]:
         params = {"key": self.key, "outputType": "JSON"}
 
         for key, value in kwargs.items():
             if isinstance(value, (tuple, list)):
                 values = [self._resolve_type(el) for el in value]
-                if len(values) > 4:
-                    msg = f"{key!r} received {len(values)} arguments. 4 is the maximum."
-                    raise TooManyArgsError(msg)
 
                 params[key] = values
             elif value is not None:
@@ -40,7 +37,7 @@ class ParamBuilder:
 
         return params
 
-    def _resolve_type(self, value):
+    def _resolve_type(self, value: Union[int, Route]):
         if isinstance(value, Route):
             return value.value
 
@@ -63,7 +60,14 @@ class CTAClient:
     - locations
     - follow
 
-    Example:
+    Args:
+        key: Chicago Transit Authority API key
+
+    Attributes:
+        version: Version of the api
+        builder: ParamBuilder instance to format endpoint kwargs
+
+    Examples:
         Initialize the client.
 
         >>> cta = CTAClient()
@@ -80,6 +84,7 @@ class CTAClient:
             raise NoCredentialsError(msg)
 
         self.version: int = 1
+        self.max_number_params = 4
 
         self.builder = ParamBuilder(key=self.key)
 
@@ -117,6 +122,9 @@ class CTAClient:
             msg = "Both 'mapid' and 'stpid' cannot be null. Please provide one."
             raise RequiredArgMissingError(msg)
 
+        self._check_number_args(mapid, "mapid")
+        self._check_number_args(stpid, "stpid")
+
         if mapid is not None and stpid is not None:
             warnings.warn(
                 "Both the 'mapid' and 'stpid' arguments were used. Might have unexpected behavior."
@@ -128,12 +136,17 @@ class CTAClient:
 
         return ArrivalResponse(data=self._send_request(url, params))
 
+    def _check_number_args(self, arg, name: str) -> None:
+        if isinstance(arg, list) and len(arg) > self.max_number_params:
+            msg = f"{name!r} received {len(arg)} arguments. {self.max_number_params} is the maximum."
+            raise TooManyArgsError(msg)
+
     def locations(self, route: Union[Route, list[Route]]) -> LocationResponse:
         """Get the location of trains for route(s).
 
         Args:
-            route: Single or multiple cta.route.Route instances. A max of four
-                routes is allowed from CTA API
+            route: Single or multiple cta.route.Route instances. No max on number
+                of routes.
 
         Returns:
             LocationResponse
@@ -145,7 +158,7 @@ class CTAClient:
 
         return LocationResponse(data=self._send_request(url, params))
 
-    def follow(self, runnumber: str) -> FollowResponse:
+    def follow(self, runnumber: Union[int, str]) -> FollowResponse:
         """Follow a given train by its runnumber.
 
         Args:
@@ -165,11 +178,11 @@ class CTAClient:
 
         return FollowResponse(data=self._send_request(url, params))
 
-    def _send_request(self, url, params):
+    def _send_request(self, url: str, params: dict[str, Any]):
         response = requests.get(url, params=params)
 
         if not response.ok:
-            msg = f"The response was not okay for {url!r}."
+            msg = f"The response was not okay for {url!r}. Response was {response.text}"
             raise Exception(msg)
 
         return response.json()

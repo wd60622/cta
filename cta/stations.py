@@ -52,7 +52,7 @@ class Stations:
         print(f"Saving station info to {file}.")
         self.data[self.columns].to_csv(file, index=False)
 
-    def lookup(self, name: str, route: Route) -> pd.DataFrame:
+    def lookup(self, name: str, route: Optional[Route] = None) -> pd.DataFrame:
         """Helper function to search for stations ids.
 
         Args:
@@ -64,6 +64,7 @@ class Stations:
 
         """
         idx = self.data["station_name"].str.lower().str.contains(name.lower())
-        idx = idx & self.data[route.value]
+        if route is not None:
+            idx = idx & self.data[route.value]
 
         return self.data.loc[idx, self.columns].reset_index(drop=True)

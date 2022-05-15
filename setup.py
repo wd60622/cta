@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from cta import __version__
 
 from setuptools import setup
 
@@ -10,9 +11,10 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cta",
-    version="0.1.0",
+    version=__version__,
     author="William Dean",
     author_email="wd60622@gmail.com",
+    url="https://github.com/wd60622/cta",
     description="Python Client for Chicago Transit Data.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -26,4 +28,5 @@ setup(
     ],
     packages=["cta"],
     install_requires=["requests", "pandas"],
+    test_require=["pytest", "pytest-mock"],
 )
